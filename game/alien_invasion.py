@@ -4,6 +4,7 @@ import pygame
 
 from game.setting import Settings
 from game.ship import Ship
+from bullet import Bullet
 
 
 class AlienInvasion:
@@ -12,17 +13,20 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.screen_width = self.screen.get_rect().width
-        self.screen_height = self.screen.get_rect().height
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.screen_width = self.screen.get_rect().width
+        # self.screen_height = self.screen.get_rect().height
         pygame.display.set_caption('Alien Invasion')
 
         self.ship = Ship(self)
+        self.bullet = pygame.sprite.Group()
 
     def run_game(self):
         while True:
             self._check_events()
             self.ship.update()
+            self._update_bullet()
             self._update_screen()
 
             pygame.display.flip()
@@ -40,13 +44,21 @@ class AlienInvasion:
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
+            print('right')
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
+            print('left')
         elif event.key == pygame.K_UP:
             self.ship.moving_up = True
+            print('up')
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = True
+            print('down')
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
+            print('fire')
         elif event.key == pygame.K_q:
+            print('quit')
             sys.exit()
 
     def _check_keyup_events(self, event):
@@ -59,9 +71,21 @@ class AlienInvasion:
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = False
 
+    def _fire_bullet(self):
+        if len(self.bullet) < self.settings.bullet_allowed:
+            new_bullet = Bullet(self)
+            self.bullet.add(new_bullet)
+
+    def _update_bullet(self):
+        self.bullet.update()
+        for blt in self.bullet.sprites():
+            if blt.rect.bottom < 0:
+                self.bullet.remove(blt)
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
+        for bullets in self.bullet.sprites():
+            bullets.draw_bullet()
         self.ship.blitme()
 
 
