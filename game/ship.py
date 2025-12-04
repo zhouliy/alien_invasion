@@ -22,6 +22,7 @@ class Ship:
         self.moving_up = False
         self.moving_down = False
 
+    # 更新飞船的状态
     def update(self):
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
@@ -35,7 +36,10 @@ class Ship:
         self.rect.x = self.x
         self.rect.y = self.y
 
+    def center_ship(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
 
-
+    # 把飞船画出来，需要搭配update使用
     def blitme(self):
             self.screen.blit(self.image, self.rect)

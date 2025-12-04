@@ -16,9 +16,11 @@ class Bullet(Sprite):
         self.rect.midtop = ai_game.ship.rect.midtop
         self.y = float(self.rect.y)
 
+    # 更新子弹的速度
     def update(self):
         self.y -= self.settings.bullet_speed
         self.rect.y = self.y
 
+    # 创造子弹
     def draw_bullet(self):
         pygame.draw.rect(self.screen, self.color, self.rect)
