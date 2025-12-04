@@ -210,3 +210,6 @@ class AlienInvasion:
 if __name__ == '__main__':
     ai = AlienInvasion()
     ai.run_game()
+
+
+# todo:记分系统，新增开始按钮，背景乐，提高难度，显示积分与最高分
